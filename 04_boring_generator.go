@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func boringGenerator(msg string) <-chan string {
+func BoringGenerator(msg string) <-chan string {
 	c := make(chan string)
 	go func() {
 		for i := 0; ; i++ {

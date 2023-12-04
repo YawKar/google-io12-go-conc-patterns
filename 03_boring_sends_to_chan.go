@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func boringSendToChan(msg string, c chan<- string) {
+func BoringSendToChan(msg string, c chan<- string) {
 	for i := 0; ; i++ {
 		c <- fmt.Sprintf("%s %d", msg, i)
 		time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)

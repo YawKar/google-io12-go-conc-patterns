@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func boringWithQuit(msg string, quit <-chan bool) <-chan string {
+func BoringWithQuit(msg string, quit <-chan bool) <-chan string {
 	c := make(chan string)
 	go func() {
 		for i := 0; ; i++ {

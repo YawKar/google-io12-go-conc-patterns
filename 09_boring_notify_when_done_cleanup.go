@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func boringWithQuitAndNotifyWhenCleanupIsDone(msg string, quit chan string) <-chan string {
+func BoringWithQuitAndNotifyWhenCleanupIsDone(msg string, quit chan string) <-chan string {
 	c := make(chan string)
 	go func() {
 		for i := 0; ; i++ {

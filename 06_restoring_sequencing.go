@@ -11,7 +11,7 @@ type Message struct {
 	wait chan bool
 }
 
-func boringSequencingViaWaitChan(msg string) <-chan Message {
+func BoringSequencingViaWaitChan(msg string) <-chan Message {
 	c := make(chan Message)
 	waitForIt := make(chan bool)
 	go func() {

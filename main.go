@@ -9,41 +9,41 @@ import (
 func main() {
 }
 
-func main01() {
-	boring("boring!")
+func Main01() {
+	Boring("boring!")
 }
 
-func main02() {
-	go boringRand("boring!")
+func Main02() {
+	go BoringRand("boring!")
 }
 
-func main02_1() {
-	go boringRand("boring!")
+func Main02_1() {
+	go BoringRand("boring!")
 	fmt.Println("I'm listening!")
 	time.Sleep(2 * time.Second)
 	fmt.Println("You're boring; I'm leaving.")
 }
 
-func main03() {
+func Main03() {
 	c := make(chan string)
-	go boringSendToChan("boring!", c)
+	go BoringSendToChan("boring!", c)
 	for i := 0; i < 5; i++ {
 		fmt.Printf("You say: %q\n", <-c)
 	}
 	fmt.Println("You're boring; I'm leaving.")
 }
 
-func main04() {
-	c := boringGenerator("boring!")
+func Main04() {
+	c := BoringGenerator("boring!")
 	for i := 0; i < 5; i++ {
 		fmt.Printf("You say: %q\n", <-c)
 	}
 	fmt.Println("You're boring; I'm leaving.")
 }
 
-func main04_1() {
-	joe := boringGenerator("Joe")
-	ann := boringGenerator("Ann")
+func Main04_1() {
+	joe := BoringGenerator("Joe")
+	ann := BoringGenerator("Ann")
 	for i := 0; i < 5; i++ {
 		fmt.Println(<-joe)
 		fmt.Println(<-ann)
@@ -51,18 +51,18 @@ func main04_1() {
 	fmt.Println("You're both boring; I'm leaving.")
 }
 
-func main05() {
-	fanned := fanIn(boringGenerator("joe"), boringGenerator("ann"))
+func Main05() {
+	fanned := FanIn(BoringGenerator("joe"), BoringGenerator("ann"))
 	for i := 0; i < 10; i++ {
 		fmt.Println(<-fanned)
 	}
 	fmt.Println("You're both boring; I'm leaving.")
 }
 
-func main06() {
-	joe := boringSequencingViaWaitChan("Joe")
-	ann := boringSequencingViaWaitChan("Ann")
-	fanned := fanIn(joe, ann)
+func Main06() {
+	joe := BoringSequencingViaWaitChan("Joe")
+	ann := BoringSequencingViaWaitChan("Ann")
+	fanned := FanIn(joe, ann)
 	for i := 0; i < 5; i++ {
 		msg1 := <-fanned
 		fmt.Printf("msg1: %v\n", msg1.str)
@@ -75,8 +75,8 @@ func main06() {
 	fmt.Println("You're boring; I'm leaving.")
 }
 
-func main07() {
-	fanned := fanInViaSelect(boringSequencingViaWaitChan("Joe"), boringSequencingViaWaitChan("Ann"))
+func Main07() {
+	fanned := FanInViaSelect(BoringSequencingViaWaitChan("Joe"), BoringSequencingViaWaitChan("Ann"))
 	for i := 0; i < 5; i++ {
 		msg1 := <-fanned
 		fmt.Printf("msg1: %v\n", msg1.str)
@@ -88,8 +88,8 @@ func main07() {
 	fmt.Println("You're both boring; I'm leaving.")
 }
 
-func main08() {
-	joe := boringGenerator("joe")
+func Main08() {
+	joe := BoringGenerator("joe")
 	for {
 		select {
 		case v := <-joe:
@@ -101,8 +101,8 @@ func main08() {
 	}
 }
 
-func main09() {
-	joe := boringGenerator("Joe")
+func Main09() {
+	joe := BoringGenerator("Joe")
 	timeout := time.After(5 * time.Second)
 	for {
 		select {
@@ -115,8 +115,8 @@ func main09() {
 	}
 }
 
-func main09_1() {
-	c := fanInViaSelect(boringSequencingViaWaitChan("Joe"), boringSequencingViaWaitChan("Ann"))
+func Main09_1() {
+	c := FanInViaSelect(BoringSequencingViaWaitChan("Joe"), BoringSequencingViaWaitChan("Ann"))
 	timeout := time.After(5 * time.Second)
 	for {
 		select {
@@ -130,18 +130,18 @@ func main09_1() {
 	}
 }
 
-func main10() {
+func Main10() {
 	quit := make(chan bool)
-	joe := boringWithQuit("Joe", quit)
+	joe := BoringWithQuit("Joe", quit)
 	for i := rand.Intn(10); i >= 0; i-- {
 		fmt.Println(<-joe)
 	}
 	quit <- true
 }
 
-func main11() {
+func Main11() {
 	quit := make(chan string)
-	joe := boringWithQuitAndNotifyWhenCleanupIsDone("Joe", quit)
+	joe := BoringWithQuitAndNotifyWhenCleanupIsDone("Joe", quit)
 	for i := rand.Intn(10); i >= 0; i-- {
 		fmt.Println(<-joe)
 	}
@@ -150,21 +150,21 @@ func main11() {
 	fmt.Printf("Joe says: %s\n", <-quit)
 }
 
-func main12() {
+func Main12() {
 	const n = 100000
 	leftmost := make(chan int)
 	right := leftmost
 	left := leftmost
 	for i := 0; i < n; i++ {
 		right = make(chan int)
-		go mapConnect(left, right, func(v int) int { return v + 1 })
+		go MapConnect(left, right, func(v int) int { return v + 1 })
 		left = right
 	}
 	go func(c chan int) { c <- 1 }(right)
 	fmt.Println(<-leftmost)
 }
 
-func main13() {
+func Main13() {
 	start := time.Now()
 	results := Google1_0("golang")
 	elapsed := time.Since(start)
@@ -172,7 +172,7 @@ func main13() {
 	fmt.Println(elapsed)
 }
 
-func main14() {
+func Main14() {
 	start := time.Now()
 	results := Google2_0("golang")
 	elapsed := time.Since(start)
@@ -180,7 +180,7 @@ func main14() {
 	fmt.Println(elapsed)
 }
 
-func main15() {
+func Main15() {
 	start := time.Now()
 	results := Google2_1("golang")
 	elapsed := time.Since(start)
@@ -188,7 +188,7 @@ func main15() {
 	fmt.Println(elapsed)
 }
 
-func main16() {
+func Main16() {
 	start := time.Now()
 	results := First("golang", fakeSearch("replica 1"), fakeSearch("replica 2"))
 	elapsed := time.Since(start)
@@ -196,7 +196,7 @@ func main16() {
 	fmt.Println(elapsed)
 }
 
-func main17() {
+func Main17() {
 	start := time.Now()
 	results := Google3_0("golang")
 	elapsed := time.Since(start)

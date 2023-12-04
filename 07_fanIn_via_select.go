@@ -1,6 +1,6 @@
 package main
 
-func fanInViaSelect[T any](c1, c2 <-chan T) <-chan T {
+func FanInViaSelect[T any](c1, c2 <-chan T) <-chan T {
 	c := make(chan T)
 	go func() {
 		for {
