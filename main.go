@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 )
 
@@ -56,4 +57,84 @@ func main05() {
 		fmt.Println(<-fanned)
 	}
 	fmt.Println("You're both boring; I'm leaving.")
+}
+
+func main06() {
+	joe := boringSequencingViaWaitChan("Joe")
+	ann := boringSequencingViaWaitChan("Ann")
+	fanned := fanIn(joe, ann)
+	for i := 0; i < 5; i++ {
+		msg1 := <-fanned
+		fmt.Printf("msg1: %v\n", msg1.str)
+		msg2 := <-fanned
+		fmt.Printf("msg2: %v\n", msg2.str)
+		// msg3 := <-fanned // will block
+		msg1.wait <- true
+		msg2.wait <- true
+	}
+	fmt.Println("You're boring; I'm leaving.")
+}
+
+func main07() {
+	fanned := fanInViaSelect(boringSequencingViaWaitChan("Joe"), boringSequencingViaWaitChan("Ann"))
+	for i := 0; i < 5; i++ {
+		msg1 := <-fanned
+		fmt.Printf("msg1: %v\n", msg1.str)
+		msg2 := <-fanned
+		fmt.Printf("msg2: %v\n", msg2.str)
+		msg1.wait <- true
+		msg2.wait <- true
+	}
+	fmt.Println("You're both boring; I'm leaving.")
+}
+
+func main08() {
+	joe := boringGenerator("joe")
+	for {
+		select {
+		case v := <-joe:
+			fmt.Println(v)
+		case <-time.After(500 * time.Millisecond):
+			fmt.Println("You're too slow, Joe. I'm leaving.")
+			return
+		}
+	}
+}
+
+func main09() {
+	joe := boringGenerator("Joe")
+	timeout := time.After(5 * time.Second)
+	for {
+		select {
+		case s := <-joe:
+			fmt.Println(s)
+		case <-timeout:
+			fmt.Println("You talk too much. I'm leaving.")
+			return
+		}
+	}
+}
+
+func main09_1() {
+	c := fanInViaSelect(boringSequencingViaWaitChan("Joe"), boringSequencingViaWaitChan("Ann"))
+	timeout := time.After(5 * time.Second)
+	for {
+		select {
+		case m := <-c:
+			fmt.Println(m.str)
+			m.wait <- true
+		case <-timeout:
+			fmt.Println("You both talk too much. I'm leaving.")
+			return
+		}
+	}
+}
+
+func main10() {
+	quit := make(chan bool)
+	joe := boringWithQuit("Joe", quit)
+	for i := rand.Intn(10); i >= 0; i-- {
+		fmt.Println(<-joe)
+	}
+	quit <- true
 }

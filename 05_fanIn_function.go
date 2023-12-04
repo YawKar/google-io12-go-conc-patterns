@@ -1,6 +1,6 @@
 package main
 
-func fanIn[T any](c1 <-chan T, c2 <-chan T) <-chan T {
+func fanIn[T any](c1, c2 <-chan T) <-chan T {
 	resc := make(chan T)
 	go func() {
 		for {
