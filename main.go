@@ -138,3 +138,68 @@ func main10() {
 	}
 	quit <- true
 }
+
+func main11() {
+	quit := make(chan string)
+	joe := boringWithQuitAndNotifyWhenCleanupIsDone("Joe", quit)
+	for i := rand.Intn(10); i >= 0; i-- {
+		fmt.Println(<-joe)
+	}
+	fmt.Println("Saying Joe to stop!")
+	quit <- "You should stop!"
+	fmt.Printf("Joe says: %s\n", <-quit)
+}
+
+func main12() {
+	const n = 100000
+	leftmost := make(chan int)
+	right := leftmost
+	left := leftmost
+	for i := 0; i < n; i++ {
+		right = make(chan int)
+		go mapConnect(left, right, func(v int) int { return v + 1 })
+		left = right
+	}
+	go func(c chan int) { c <- 1 }(right)
+	fmt.Println(<-leftmost)
+}
+
+func main13() {
+	start := time.Now()
+	results := Google1_0("golang")
+	elapsed := time.Since(start)
+	fmt.Println(results)
+	fmt.Println(elapsed)
+}
+
+func main14() {
+	start := time.Now()
+	results := Google2_0("golang")
+	elapsed := time.Since(start)
+	fmt.Println(results)
+	fmt.Println(elapsed)
+}
+
+func main15() {
+	start := time.Now()
+	results := Google2_1("golang")
+	elapsed := time.Since(start)
+	fmt.Println(results)
+	fmt.Println(elapsed)
+}
+
+func main16() {
+	start := time.Now()
+	results := First("golang", fakeSearch("replica 1"), fakeSearch("replica 2"))
+	elapsed := time.Since(start)
+	fmt.Println(results)
+	fmt.Println(elapsed)
+}
+
+func main17() {
+	start := time.Now()
+	results := Google3_0("golang")
+	elapsed := time.Since(start)
+	fmt.Println(results)
+	fmt.Println(elapsed)
+}
